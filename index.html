@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Simulador da Reforma Tributária 2027–2033 | Leactis</title>
+<meta name="description" content="Simule grátis o impacto da Reforma Tributária no seu negócio: compare Simples Nacional, regime híbrido e Lucro Presumido ano a ano, de 2027 a 2033.">
+<!-- Troque SEU-DOMINIO-AQUI pela URL real assim que a primeira publicação
+     sair (painel da Vercel > Deployments, ou o domínio próprio que você
+     configurar em Settings > Domains). Veja o README. -->
+<link rel="canonical" href="https://SEU-DOMINIO-AQUI/">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" href="/img/favicon-32x32.png" type="image/png" sizes="32x32">
+<link rel="icon" href="/img/favicon-16x16.png" type="image/png" sizes="16x16">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
+<meta name="theme-color" content="#0B2341">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Leactis">
+<meta property="og:title" content="Simulador da Reforma Tributária 2027–2033 | Leactis">
+<meta property="og:description" content="Descubra em 2 minutos qual regime tributário compensa mais para o seu negócio durante a transição da Reforma Tributária.">
+<meta property="og:image" content="https://SEU-DOMINIO-AQUI/img/og-image.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:url" content="https://SEU-DOMINIO-AQUI/">
+<meta property="og:locale" content="pt_BR">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Simulador da Reforma Tributária 2027–2033 | Leactis">
+<meta name="twitter:description" content="Descubra em 2 minutos qual regime tributário compensa mais para o seu negócio durante a transição da Reforma Tributária.">
+<meta name="twitter:image" content="https://SEU-DOMINIO-AQUI/img/og-image.jpg">
+<link rel="stylesheet" href="/css/leactis.css">
+<script>
+  // Google Analytics (GA4) — opcional, mesmo padrão do site principal.
+  // Troque pelo Measurement ID real (analytics.google.com) quando tiver um.
+  // Enquanto não for trocado, este bloco não carrega nada.
+  window.LEACTIS_GA_ID = 'G-XXXXXXXXXX';
+  (function () {
+    if (!window.LEACTIS_GA_ID || window.LEACTIS_GA_ID.indexOf('XXXXXXXXXX') !== -1) return;
+    var s = document.createElement('script');
+    s.async = true;
+    s.src = 'https://www.googletagmanager.com/gtag/js?id=' + window.LEACTIS_GA_ID;
+    document.head.appendChild(s);
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { window.dataLayer.push(arguments); }
+    window.gtag = gtag;
+    gtag('js', new Date());
+    gtag('config', window.LEACTIS_GA_ID);
+  })();
+
+  // Meta Pixel (Facebook/Instagram Ads) — opcional. Troque pelo Pixel ID real
+  // (Gerenciador de Eventos do Meta Business) quando tiver um. Enquanto não
+  // for trocado, este bloco não carrega nada nem faz nenhuma requisição.
+  window.LEACTIS_META_PIXEL_ID = '0000000000000000';
+  (function () {
+    if (!window.LEACTIS_META_PIXEL_ID || /^0+$/.test(window.LEACTIS_META_PIXEL_ID)) return;
+    var f = window.fbq = function () { f.callMethod ? f.callMethod.apply(f, arguments) : f.queue.push(arguments); };
+    if (!window._fbq) window._fbq = f;
+    f.push = f; f.loaded = true; f.version = '2.0'; f.queue = [];
+    var s = document.createElement('script');
+    s.async = true;
+    s.src = 'https://connect.facebook.net/en_US/fbevents.js';
+    document.head.appendChild(s);
+    fbq('init', window.LEACTIS_META_PIXEL_ID);
+    fbq('track', 'PageView');
+  })();
+</script>
+<style>
+  /* Estilos específicos desta página — reaproveita as variáveis e classes
+     (.wrap, .btn, .field, .input, cores) definidas em /css/leactis.css. */
+  body.sim{background:var(--color-bg)}
+  .sim-hero{background:linear-gradient(135deg,var(--color-accent-900),#0F4D5C 65%,var(--color-accent-700));color:var(--color-bg);padding:20px clamp(20px,5vw,48px) 56px}
+  .sim-hero .wrap{max-width:820px}
+  .sim-brand{display:flex;align-items:center;gap:12px;margin-bottom:28px}
+  .sim-brand img{height:34px;width:auto}
+  .sim-brand span{font-family:var(--font-heading);font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:var(--color-accent-300)}
+  .sim-hero h1{color:#fff;font-size:clamp(28px,4vw,40px);margin-bottom:12px}
+  .sim-hero p.lead{color:rgba(242,242,243,.82);font-size:16px;max-width:640px}
+  .sim-trust{display:flex;flex-wrap:wrap;gap:10px 22px;margin-top:20px;font-size:13px;color:var(--color-accent-300)}
+  .sim-trust span{display:flex;align-items:center;gap:6px}
+  .sim-wrap{max-width:820px;margin:-32px auto 0;padding:0 clamp(20px,5vw,48px) 64px;position:relative}
+  .sim-card{background:#fff;border:1px solid var(--color-divider);border-radius:4px;padding:28px;box-shadow:var(--shadow-lg);margin-bottom:22px}
+  .sim-card h2{font-size:20px;margin-bottom:4px}
+  .sim-card .sub{font-size:13px;color:rgba(29,31,32,.6);margin-bottom:20px}
+  .sim-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:18px}
+  .sim-range-val{font-family:var(--font-heading);font-weight:700;color:var(--color-accent-700)}
+  input[type=range].sim-range{width:100%;accent-color:var(--color-accent)}
+  .sim-hidden{display:none !important}
+  .sim-kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:18px;margin-bottom:24px}
+  .sim-kpi .lbl{font-size:12px;color:rgba(29,31,32,.6);margin-bottom:2px}
+  .sim-kpi .val{font-family:var(--font-heading);font-size:22px;font-weight:700}
+  .sim-kpi .sub{font-size:12.5px;color:rgba(29,31,32,.6)}
+  .sim-bars{display:flex;align-items:flex-end;gap:18px;height:220px;padding-top:28px}
+  .sim-bar-col{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%}
+  .sim-bar-val{font-size:12.5px;font-weight:700;margin-bottom:6px;white-space:nowrap}
+  .sim-bar{width:100%;max-width:88px;border-radius:4px 4px 0 0;transition:height .35s ease}
+  .sim-bar-name{font-size:12px;margin-top:8px;text-align:center;color:rgba(29,31,32,.75)}
+  .sim-legend{display:flex;flex-wrap:wrap;gap:14px;margin-top:18px;font-size:12.5px;color:rgba(29,31,32,.75)}
+  .sim-legend span{display:inline-flex;align-items:center;gap:6px}
+  .sim-legend i{width:10px;height:10px;border-radius:2px;display:inline-block}
+  .sim-tabs{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap}
+  .sim-tab{font:inherit;font-size:13px;font-weight:600;padding:8px 14px;border-radius:20px;border:1px solid var(--color-divider);background:transparent;cursor:pointer;color:var(--color-text)}
+  .sim-tab.sel{background:var(--color-accent);border-color:var(--color-accent);color:#06231f}
+  .sim-comp-row{display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid var(--color-divider);font-size:13.5px}
+  .sim-comp-row:last-child{border-bottom:none;font-weight:700}
+  .sim-credito{margin-top:14px;padding:12px 14px;background:var(--color-accent-100);border-radius:4px;font-size:13px;color:var(--color-accent-800)}
+  .sim-diag p{font-size:14.5px;line-height:1.65;color:#2a2c2d}
+  .sim-disclaimer{font-size:12px;color:rgba(29,31,32,.55);line-height:1.6;margin-top:8px}
+  .sim-cta{background:linear-gradient(135deg,var(--color-accent-900),var(--color-accent-700));border-radius:4px;padding:30px 26px;text-align:center;color:#fff}
+  .sim-cta h3{color:#fff;font-size:19px;margin-bottom:8px}
+  .sim-cta p{color:rgba(242,242,243,.85);font-size:14px;margin-bottom:18px}
+  .sim-footer{text-align:center;padding:28px 20px 40px;font-size:12px;color:rgba(29,31,32,.5)}
+  .sim-footer a{color:rgba(29,31,32,.6)}
+  #sim-lead-err{color:#b3271f;font-size:.8rem;margin-bottom:10px}
+</style>
+</head>
+<body class="sim">
+
+<header class="sim-hero">
+  <div class="wrap">
+    <a class="sim-brand" href="https://leactis-site.vercel.app/">
+      <img src="/img/leactis-logo-nav.png" alt="Leactis">
+      <span>Leactis · Reforma Tributária</span>
+    </a>
+    <h1>Quanto a Reforma Tributária vai custar (ou economizar) para o seu negócio?</h1>
+    <p class="lead">Em menos de 2 minutos, compare os 3 caminhos possíveis — Simples Nacional, regime híbrido e Lucro Presumido — ano a ano, de 2027 a 2033, e veja onde sua empresa sai ganhando.</p>
+    <div class="sim-trust">
+      <span>✓ Grátis e sem compromisso</span>
+      <span>✓ Baseado na EC 132/2023 e LC 214/2025</span>
+      <span>✓ Leva menos de 2 minutos</span>
+    </div>
+  </div>
+</header>
+
+<main class="sim-wrap">
+
+  <section class="sim-card" id="sim-inputs">
+    <h2>Simule o seu cenário</h2>
+    <p class="sub">Ajuste os campos abaixo — o resultado é recalculado automaticamente.</p>
+    <div class="sim-grid">
+      <label class="field">
+        <span>Faturamento mensal (R$)</span>
+        <input class="input" type="number" id="f-faturamento" min="1000" step="1000" value="150000">
+      </label>
+      <label class="field">
+        <span>Atividade</span>
+        <select class="input" id="f-atividade">
+          <option value="comercio">Comércio</option>
+          <option value="industria">Indústria</option>
+          <option value="servico" selected>Serviços</option>
+        </select>
+      </label>
+      <label class="field">
+        <span>Alíquota média ICMS/ISS atual (%)</span>
+        <input class="input" type="number" id="f-icmsiss" min="0" max="35" step="0.5" value="5">
+      </label>
+      <label class="field">
+        <span>Ano analisado: <span class="sim-range-val" id="f-ano-val">2027</span></span>
+        <input type="range" class="sim-range" id="f-ano" min="2027" max="2033" step="1" value="2027">
+      </label>
+    </div>
+    <button type="button" class="btn btn-primary btn-block" id="btn-calcular" style="margin-top:8px">Ver meu resultado →</button>
+  </section>
+
+  <section class="sim-card" id="sim-lead-gate">
+    <h2>Quase lá — para onde enviamos o seu resultado?</h2>
+    <p class="sub">Só usamos isso para te mostrar o resultado agora e, se você quiser, te ajudar a validar o número com um especialista. Sem spam.</p>
+    <label class="field">
+      <span>Nome</span>
+      <input class="input" type="text" id="lead-nome" placeholder="Seu nome">
+    </label>
+    <label class="field">
+      <span>WhatsApp</span>
+      <input class="input" type="tel" id="lead-whatsapp" placeholder="(21) 99999-0000">
+    </label>
+    <input type="text" id="lead-hp" name="website" autocomplete="off" tabindex="-1" style="position:absolute;left:-9999px;width:1px;height:1px;opacity:0" aria-hidden="true">
+    <div id="sim-lead-err" style="display:none"></div>
+    <button type="button" class="btn btn-primary btn-block" id="btn-ver-resultado">Ver meu resultado agora →</button>
+  </section>
+
+  <section id="sim-resultado" class="sim-hidden">
+
+    <section class="sim-card">
+      <h2>Resultado da simulação</h2>
+      <p class="sub" id="res-sub"></p>
+      <div class="sim-kpis">
+        <div class="sim-kpi">
+          <div class="lbl" id="res-kpi1-lbl">Opção mais econômica</div>
+          <div class="val" id="res-kpi1-val" style="color:var(--color-accent-700)"></div>
+          <div class="sub" id="res-kpi1-sub"></div>
+        </div>
+        <div class="sim-kpi">
+          <div class="lbl">Diferença por mês</div>
+          <div class="val" id="res-kpi2-val"></div>
+          <div class="sub" id="res-kpi2-sub"></div>
+        </div>
+        <div class="sim-kpi">
+          <div class="lbl">Atividade</div>
+          <div class="val" id="res-kpi3-val"></div>
+          <div class="sub" id="res-kpi3-sub"></div>
+        </div>
+      </div>
+      <div class="sim-bars" id="res-bars"></div>
+      <div class="sim-legend" id="res-bars-legend"></div>
+      <p class="sim-disclaimer">"Regime híbrido" = permanece no Simples Nacional recolhendo CBS/IBS separadamente para gerar crédito ao cliente PJ. Valores estimados.</p>
+    </section>
+
+    <section class="sim-card">
+      <h2>Trajetória na transição (2027 a 2033)</h2>
+      <p class="sub">Quanto sai do caixa por mês em cada caminho, ano a ano.</p>
+      <div id="res-line"></div>
+      <div class="sim-legend" id="res-line-legend"></div>
+    </section>
+
+    <section class="sim-card">
+      <h2>De onde vem esse número</h2>
+      <p class="sub">Composição detalhada de cada caminho no ano selecionado.</p>
+      <div class="sim-tabs" id="res-tabs"></div>
+      <div id="res-composicao"></div>
+      <div class="sim-credito sim-hidden" id="res-credito"></div>
+    </section>
+
+    <section class="sim-card sim-diag">
+      <h2>Diagnóstico e orientação</h2>
+      <div id="res-diag"></div>
+      <p class="sim-disclaimer">Simulação com valores estimados, para apoio à decisão. Alíquotas de referência de CBS (~8,8%) e IBS (~17,7%) ainda dependem de resolução do Senado Federal (art. 349, LC 214/2025) e podem mudar. Base legal: EC 132/2023 e LC 214/2025. Não substitui uma análise tributária individualizada.</p>
+    </section>
+
+    <section class="sim-cta">
+      <h3>Quer o número exato para o seu caso?</h3>
+      <p>A Leactis faz uma avaliação gratuita e sigilosa, com simulação individual do seu regime.</p>
+      <a href="#" id="res-whats-cta" target="_blank" rel="noreferrer" class="btn btn-on-dark">Quero minha avaliação gratuita</a>
+      <p style="color:rgba(242,242,243,.7);font-size:12px;margin-top:12px">Sem custo, leva menos de 2 minutos.</p>
+    </section>
+
+  </section>
+
+</main>
+
+<footer class="sim-footer">
+  <a href="https://leactis-site.vercel.app/">leactis.com.br</a> · Organiza. Estrutura. Protege.
+</footer>
+
+<script>
+(function () {
+  "use strict";
+
+  // ---------- Tabelas do Simples Nacional (LC 123/2006, alterada pela LC 155/2016) ----------
+  var ANEXOS = {
+    comercio: { label: "Comércio (Anexo I)", faixas: [
+      { limite: 180000, aliquota: 0.04, deduzir: 0 },
+      { limite: 360000, aliquota: 0.073, deduzir: 5940 },
+      { limite: 720000, aliquota: 0.095, deduzir: 13860 },
+      { limite: 1800000, aliquota: 0.107, deduzir: 22500 },
+      { limite: 3600000, aliquota: 0.143, deduzir: 87300 },
+      { limite: 4800000, aliquota: 0.19, deduzir: 378000 },
+    ]},
+    industria: { label: "Indústria (Anexo II)", faixas: [
+      { limite: 180000, aliquota: 0.045, deduzir: 0 },
+      { limite: 360000, aliquota: 0.078, deduzir: 5940 },
+      { limite: 720000, aliquota: 0.10, deduzir: 13860 },
+      { limite: 1800000, aliquota: 0.112, deduzir: 22500 },
+      { limite: 3600000, aliquota: 0.147, deduzir: 85500 },
+      { limite: 4800000, aliquota: 0.30, deduzir: 720000 },
+    ]},
+    servico: { label: "Serviços (Anexo III)", faixas: [
+      { limite: 180000, aliquota: 0.06, deduzir: 0 },
+      { limite: 360000, aliquota: 0.112, deduzir: 9360 },
+      { limite: 720000, aliquota: 0.135, deduzir: 17640 },
+      { limite: 1800000, aliquota: 0.16, deduzir: 35640 },
+      { limite: 3600000, aliquota: 0.21, deduzir: 125640 },
+      { limite: 4800000, aliquota: 0.33, deduzir: 648000 },
+    ]},
+  };
+
+  var PRESUNCAO = {
+    comercio: { irpj: 0.08, csll: 0.12 },
+    industria: { irpj: 0.08, csll: 0.12 },
+    servico: { irpj: 0.32, csll: 0.32 },
+  };
+
+  // Alíquotas de referência estimadas (LC 214/2025, pendentes de resolução do Senado, art. 349)
+  var CBS_REF = 0.088; // ~8,8%
+  var IBS_REF = 0.177; // ~17,7% (soma de referência ~26,5%)
+  var ANOS = [2027, 2028, 2029, 2030, 2031, 2032, 2033];
+  var ATIV_LABEL = { comercio: "Comércio", industria: "Indústria", servico: "Serviços" };
+  var ICMS_ISS_DEFAULT = { comercio: 0.18, industria: 0.12, servico: 0.05 };
+  var COMP_LABEL = { DAS: "DAS (Simples Nacional)", "CBS/IBS": "CBS/IBS", Extra: "Adequação/contabilidade estimada",
+    IRPJ: "IRPJ", CSLL: "CSLL", "CPP/INSS": "CPP/INSS (patronal estimado)", "ICMS/ISS": "ICMS/ISS residual" };
+
+  function fatoresAno(ano) {
+    if (ano <= 2028) return { ibsFrac: 0, icmsIssFrac: 1 };
+    var escada = { 2029: 0.10, 2030: 0.20, 2031: 0.30, 2032: 0.40 };
+    if (ano < 2033) return { ibsFrac: escada[ano], icmsIssFrac: 1 - escada[ano] };
+    return { ibsFrac: 1, icmsIssFrac: 0 };
+  }
+
+  function calcSimplesEfetiva(anexoKey, faturamentoAnual) {
+    var anexo = ANEXOS[anexoKey];
+    var faixa = anexo.faixas[anexo.faixas.length - 1];
+    for (var i = 0; i < anexo.faixas.length; i++) { if (faturamentoAnual <= anexo.faixas[i].limite) { faixa = anexo.faixas[i]; break; } }
+    if (faturamentoAnual <= 0) return faixa.aliquota;
+    return Math.max(((faturamentoAnual * faixa.aliquota) - faixa.deduzir) / faturamentoAnual, 0.01);
+  }
+
+  function calcCaminhos(p) {
+    var faturamentoAnual = p.faturamentoMensal * 12;
+    var aliqSimples = calcSimplesEfetiva(p.atividade, faturamentoAnual);
+    var dasSimples = p.faturamentoMensal * aliqSimples;
+
+    var f = fatoresAno(p.ano);
+    var cbsMensal = p.faturamentoMensal * CBS_REF;
+    var ibsMensal = p.faturamentoMensal * IBS_REF * f.ibsFrac;
+    var icmsIssResidualMensal = p.faturamentoMensal * p.icmsIssRate * f.icmsIssFrac;
+    var extra = p.ano >= 2027 ? 300 : 0;
+
+    // Guia única: permanece integralmente no Simples Nacional (DAS unificado)
+    var guiaUnica = dasSimples;
+
+    // Por fora: mantém o Simples, mas recolhe CBS/IBS "por fora" para gerar crédito ao cliente PJ
+    var porFora = dasSimples + cbsMensal + ibsMensal + extra;
+    var creditoGeradoPorFora = (cbsMensal + ibsMensal) * 0.9;
+
+    // Lucro Presumido: sai do Simples e migra integralmente para o sistema novo
+    var pres = PRESUNCAO[p.atividade];
+    var baseIrpjMensal = p.faturamentoMensal * pres.irpj;
+    var baseCsllMensal = p.faturamentoMensal * pres.csll;
+    var irpjMensal = baseIrpjMensal * 0.15 + Math.max(baseIrpjMensal - 20000, 0) * 0.10;
+    var csllMensal = baseCsllMensal * 0.09;
+    var cppMensal = p.faturamentoMensal * 0.20 * 0.30;
+    var lucroPresumido = irpjMensal + csllMensal + cppMensal + cbsMensal + ibsMensal + icmsIssResidualMensal + extra;
+    var creditoGeradoPresumido = cbsMensal + ibsMensal;
+
+    return {
+      guiaUnica: guiaUnica, porFora: porFora, lucroPresumido: lucroPresumido,
+      creditoGeradoPorFora: creditoGeradoPorFora, creditoGeradoPresumido: creditoGeradoPresumido,
+      composicao: {
+        guiaUnica: { DAS: dasSimples },
+        porFora: { DAS: dasSimples, "CBS/IBS": cbsMensal + ibsMensal, Extra: extra },
+        lucroPresumido: { IRPJ: irpjMensal, CSLL: csllMensal, "CPP/INSS": cppMensal, "CBS/IBS": cbsMensal + ibsMensal, "ICMS/ISS": icmsIssResidualMensal, Extra: extra },
+      },
+    };
+  }
+
+  function fmt(v) { return v.toLocaleString("pt-BR", { style: "currency", currency: "BRL", maximumFractionDigits: 0 }); }
+
+  // ---------- Estado ----------
+  var state = { faturamentoMensal: 150000, atividade: "servico", icmsIssRate: 0.05, ano: 2027, tab: "guiaUnica", unlocked: false, leadNome: "" };
+  var CORES = { guiaUnica: "var(--color-accent-700)", porFora: "var(--color-accent-900)", lucroPresumido: "var(--color-accent-400)" };
+  var CORES_HEX = { guiaUnica: "#0F6C65", porFora: "#0B2341", lucroPresumido: "#54D9C4" };
+  var NOMES = { guiaUnica: "Guia única", porFora: "Regime híbrido", lucroPresumido: "Lucro Presumido" };
+
+  var $ = function (id) { return document.getElementById(id); };
+
+  function readInputs() {
+    state.faturamentoMensal = Math.max(1000, Number($("f-faturamento").value) || 0);
+    state.atividade = $("f-atividade").value;
+    state.icmsIssRate = Math.max(0, Number($("f-icmsiss").value) || 0) / 100;
+    state.ano = Number($("f-ano").value);
+  }
+
+  function opcoesOrdenadas(atual) {
+    var opcoes = [
+      { key: "guiaUnica", valor: atual.guiaUnica },
+      { key: "porFora", valor: atual.porFora },
+      { key: "lucroPresumido", valor: atual.lucroPresumido },
+    ];
+    var maisEconomica = opcoes.reduce(function (a, b) { return b.valor < a.valor ? b : a; });
+    var maisCara = opcoes.reduce(function (a, b) { return b.valor > a.valor ? b : a; });
+    return { opcoes: opcoes, maisEconomica: maisEconomica, maisCara: maisCara };
+  }
+
+  function renderBars(atual) {
+    var ord = opcoesOrdenadas(atual);
+    var max = ord.maisCara.valor || 1;
+    var el = $("res-bars");
+    el.innerHTML = "";
+    ord.opcoes.forEach(function (o) {
+      var h = Math.max(6, Math.round((o.valor / max) * 190));
+      var col = document.createElement("div");
+      col.className = "sim-bar-col";
+      col.innerHTML = '<div class="sim-bar-val">' + fmt(o.valor) + '</div>' +
+        '<div class="sim-bar" style="height:' + h + 'px;background:' + CORES[o.key] + '"></div>' +
+        '<div class="sim-bar-name">' + NOMES[o.key] + '</div>';
+      el.appendChild(col);
+    });
+    var leg = $("res-bars-legend");
+    leg.innerHTML = ord.opcoes.map(function (o) {
+      return '<span><i style="background:' + CORES[o.key] + '"></i>' + NOMES[o.key] + '</span>';
+    }).join("");
+  }
+
+  function renderLine(trajetoria) {
+    var w = 720, h = 240, padL = 44, padB = 26, padT = 12, padR = 12;
+    var innerW = w - padL - padR, innerH = h - padT - padB;
+    var allVals = [];
+    trajetoria.forEach(function (t) { allVals.push(t.guiaUnica, t.porFora, t.lucroPresumido); });
+    var maxV = Math.max.apply(null, allVals) || 1;
+    var minV = 0;
+    function x(i) { return padL + (i / (trajetoria.length - 1)) * innerW; }
+    function y(v) { return padT + innerH - ((v - minV) / (maxV - minV)) * innerH; }
+
+    var gridLines = "";
+    for (var g = 0; g <= 4; g++) {
+      var gy = padT + (innerH / 4) * g;
+      gridLines += '<line x1="' + padL + '" y1="' + gy + '" x2="' + (w - padR) + '" y2="' + gy + '" stroke="var(--color-divider)" stroke-width="1"/>';
+      var val = Math.round(maxV - (maxV / 4) * g);
+      gridLines += '<text x="' + (padL - 8) + '" y="' + (gy + 4) + '" font-size="10" fill="rgba(29,31,32,.55)" text-anchor="end">' + Math.round(val / 1000) + 'k</text>';
+    }
+
+    var xLabels = "";
+    trajetoria.forEach(function (t, i) {
+      xLabels += '<text x="' + x(i) + '" y="' + (h - 6) + '" font-size="11" fill="rgba(29,31,32,.65)" text-anchor="middle">' + t.ano + '</text>';
+    });
+
+    function seriesPath(key) {
+      var pts = trajetoria.map(function (t, i) { return x(i) + "," + y(t[key]); }).join(" ");
+      var circles = trajetoria.map(function (t, i) {
+        return '<circle cx="' + x(i) + '" cy="' + y(t[key]) + '" r="3.5" fill="' + CORES_HEX[key] + '"><title>' + t.ano + ": " + fmt(t[key]) + '</title></circle>';
+      }).join("");
+      return '<polyline points="' + pts + '" fill="none" stroke="' + CORES_HEX[key] + '" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>' + circles;
+    }
+
+    var svg = '<svg viewBox="0 0 ' + w + ' ' + h + '" style="width:100%;height:auto;font-family:var(--font-body)">' +
+      gridLines + xLabels +
+      seriesPath("guiaUnica") + seriesPath("porFora") + seriesPath("lucroPresumido") +
+      '</svg>';
+    $("res-line").innerHTML = svg;
+    $("res-line-legend").innerHTML = ["guiaUnica", "porFora", "lucroPresumido"].map(function (key) {
+      return '<span><i style="background:' + CORES_HEX[key] + '"></i>' + NOMES[key] + '</span>';
+    }).join("");
+  }
+
+  function renderTabs() {
+    var el = $("res-tabs");
+    el.innerHTML = ["guiaUnica", "porFora", "lucroPresumido"].map(function (key) {
+      return '<button type="button" class="sim-tab' + (state.tab === key ? ' sel' : '') + '" data-key="' + key + '">' + NOMES[key] + '</button>';
+    }).join("");
+    el.querySelectorAll(".sim-tab").forEach(function (btn) {
+      btn.addEventListener("click", function () { state.tab = btn.getAttribute("data-key"); update(); });
+    });
+  }
+
+  function renderComposicao(atual) {
+    var comp = atual.composicao[state.tab];
+    var total = 0;
+    var rows = Object.keys(comp).filter(function (k) { return comp[k] > 0; }).map(function (k) {
+      total += comp[k];
+      return '<div class="sim-comp-row"><span>' + (COMP_LABEL[k] || k) + '</span><span>' + fmt(comp[k]) + '</span></div>';
+    }).join("");
+    rows += '<div class="sim-comp-row"><span>Total mensal</span><span>' + fmt(total) + '</span></div>';
+    $("res-composicao").innerHTML = rows;
+
+    var credEl = $("res-credito");
+    if (state.tab === "porFora" || state.tab === "lucroPresumido") {
+      var credito = state.tab === "porFora" ? atual.creditoGeradoPorFora : atual.creditoGeradoPresumido;
+      credEl.classList.remove("sim-hidden");
+      credEl.textContent = "Ao pagar CBS/IBS por essa via, sua empresa gera aproximadamente " + fmt(credito) + "/mês em crédito tributário para os clientes PJ que compram de você — um argumento comercial a mais para negociar com esse perfil de cliente.";
+    } else {
+      credEl.classList.add("sim-hidden");
+    }
+  }
+
+  function renderDiag(atual, ord) {
+    var economiaMes = ord.maisCara.valor - ord.maisEconomica.valor;
+    var p1 = "No ano de " + state.ano + ", o caminho mais econômico para uma empresa de " + ATIV_LABEL[state.atividade].toLowerCase() +
+      " faturando " + fmt(state.faturamentoMensal) + "/mês é <strong>" + NOMES[ord.maisEconomica.key] + "</strong>, com " + fmt(ord.maisEconomica.valor) +
+      "/mês. Frente à opção mais cara (" + NOMES[ord.maisCara.key] + "), a diferença chega a " + fmt(economiaMes) + "/mês (" + fmt(economiaMes * 12) + "/ano).";
+    var p2 = state.ano < 2029
+      ? "Nesta fase (2027–2028), o IBS ainda está em transição simbólica (0,1%): o maior impacto vem da CBS substituindo PIS/Cofins."
+      : state.ano < 2033
+        ? "A escada do IBS já está em andamento: parte do ICMS/ISS antigo vai sendo trocada por IBS, mudando o equilíbrio entre os caminhos ano a ano."
+        : "Em 2033 o sistema novo está integralmente implantado: ICMS, ISS, PIS e Cofins deixam de existir, e a carga passa a depender só da alíquota de referência de CBS + IBS.";
+    $("res-diag").innerHTML = "<p>" + p1 + "</p><p>" + p2 + " Vale reavaliar a decisão a cada ano da trajetória acima.</p>";
+  }
+
+  function update() {
+    readInputs();
+    $("f-ano-val").textContent = state.ano;
+    if (!state.unlocked) return;
+
+    var atual = calcCaminhos(state);
+    var ord = opcoesOrdenadas(atual);
+    var economiaMes = ord.maisCara.valor - ord.maisEconomica.valor;
+
+    $("res-sub").textContent = ATIV_LABEL[state.atividade] + " · " + fmt(state.faturamentoMensal) + "/mês · " + state.ano;
+    $("res-kpi1-lbl").textContent = "Opção mais econômica em " + state.ano;
+    $("res-kpi1-val").textContent = NOMES[ord.maisEconomica.key];
+    $("res-kpi1-sub").textContent = fmt(ord.maisEconomica.valor) + "/mês";
+    $("res-kpi2-val").textContent = fmt(economiaMes);
+    $("res-kpi2-sub").textContent = fmt(economiaMes * 12) + "/ano";
+    $("res-kpi3-val").textContent = ATIV_LABEL[state.atividade];
+    $("res-kpi3-sub").textContent = ANEXOS[state.atividade].label;
+
+    renderBars(atual);
+    var trajetoria = ANOS.map(function (a) {
+      var st = { faturamentoMensal: state.faturamentoMensal, atividade: state.atividade, icmsIssRate: state.icmsIssRate, ano: a };
+      var r = calcCaminhos(st);
+      return { ano: a, guiaUnica: Math.round(r.guiaUnica), porFora: Math.round(r.porFora), lucroPresumido: Math.round(r.lucroPresumido) };
+    });
+    renderLine(trajetoria);
+    renderTabs();
+    renderComposicao(atual);
+    renderDiag(atual, ord);
+
+    var msg = "Olá! Simulei meu regime tributário no site da Leactis" + (state.leadNome ? " (" + state.leadNome + ")" : "") +
+      " — em " + state.ano + ", a opção mais econômica é " + NOMES[ord.maisEconomica.key] + " (" + fmt(ord.maisEconomica.valor) + "/mês). Quero uma avaliação gratuita.";
+    $("res-whats-cta").href = "https://wa.me/5521986956773?text=" + encodeURIComponent(msg);
+  }
+
+  ["f-faturamento", "f-atividade", "f-icmsiss"].forEach(function (id) { $(id).addEventListener("input", update); $(id).addEventListener("change", update); });
+  $("f-ano").addEventListener("input", update);
+  $("f-atividade").addEventListener("change", function () {
+    $("f-icmsiss").value = (ICMS_ISS_DEFAULT[$("f-atividade").value] * 100).toFixed(1);
+    update();
+  });
+
+  function scrollToLeadGate() { $("sim-lead-gate").scrollIntoView({ behavior: "smooth", block: "start" }); }
+  function scrollToResultado() { $("sim-resultado").scrollIntoView({ behavior: "smooth", block: "start" }); }
+
+  $("btn-calcular").addEventListener("click", function () {
+    readInputs();
+    if (state.unlocked) { update(); scrollToResultado(); return; }
+    scrollToLeadGate();
+  });
+
+  // ---------- Captura de lead -> Supabase (mesmo padrão do resto do site) ----------
+  // Configure em Settings > API do seu projeto Supabase (veja README.md).
+  var SUPABASE_URL = 'https://SEU_PROJETO.supabase.co';
+  var SUPABASE_ANON_KEY = 'SUA_ANON_KEY';
+
+  $("btn-ver-resultado").addEventListener("click", function () {
+    var btn = this;
+    var err = $("sim-lead-err");
+    var nome = $("lead-nome").value.trim();
+    var whatsapp = $("lead-whatsapp").value.trim();
+    err.style.display = "none";
+    if (!nome || !whatsapp) {
+      err.textContent = "Preencha o nome e o WhatsApp para ver o resultado.";
+      err.style.display = "block";
+      return;
+    }
+    var honeypot = $("lead-hp").value;
+    function unlockAndShow() {
+      state.unlocked = true;
+      state.leadNome = nome.split(" ")[0];
+      $("sim-lead-gate").classList.add("sim-hidden");
+      $("sim-resultado").classList.remove("sim-hidden");
+      update();
+      scrollToResultado();
+      if (typeof window.gtag === "function") window.gtag("event", "generate_lead", { method: "simulador_reforma_tributaria" });
+      if (typeof window.fbq === "function") window.fbq("track", "Lead");
+    }
+    if (honeypot) { unlockAndShow(); return; }
+
+    readInputs();
+    var atual = calcCaminhos(state);
+    var ord = opcoesOrdenadas(atual);
+    var payload = {
+      nome: nome,
+      email: "",
+      whatsapp: whatsapp,
+      desafio: "[Simulador Reforma Tributária] Faturamento mensal: " + fmt(state.faturamentoMensal) +
+        " · Atividade: " + ATIV_LABEL[state.atividade] + " · ICMS/ISS atual: " + (state.icmsIssRate * 100).toFixed(1) +
+        "% · Ano: " + state.ano + " · Opção mais econômica: " + NOMES[ord.maisEconomica.key] + " (" + fmt(ord.maisEconomica.valor) + "/mês).",
+    };
+
+    if (SUPABASE_URL.indexOf("SEU_PROJETO") !== -1) {
+      err.textContent = "Formulário ainda não configurado. Fale pelo WhatsApp por enquanto.";
+      err.style.display = "block";
+      return;
+    }
+
+    var originalText = btn.textContent;
+    btn.disabled = true;
+    btn.textContent = "Enviando...";
+    fetch(SUPABASE_URL + "/rest/v1/leactis_leads", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "apikey": SUPABASE_ANON_KEY, "Authorization": "Bearer " + SUPABASE_ANON_KEY, "Prefer": "return=minimal" },
+      body: JSON.stringify(payload),
+    }).then(function (res) {
+      if (!res.ok) throw new Error("falha ao enviar");
+      unlockAndShow();
+    }).catch(function () {
+      err.textContent = "Não foi possível enviar agora. Tente de novo ou fale pelo WhatsApp.";
+      err.style.display = "block";
+      btn.disabled = false;
+      btn.textContent = originalText;
+    });
+  });
+
+  update();
+})();
+</script>
+</body>
+</html>
