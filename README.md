@@ -37,7 +37,13 @@ python3 -m http.server 8000
 
 1. Crie uma conta em [vercel.com](https://vercel.com) (dá pra logar com a conta do GitHub) e importe este repositório.
 2. Não precisa mudar nenhuma configuração de build — é um site estático puro, a Vercel detecta sozinha.
-3. Deploy. Depois do primeiro deploy, abra `index.html` e troque todas as ocorrências de `SEU-DOMINIO-AQUI` (tags `canonical`, `og:image`, `og:url`, `twitter:image`) pela URL real que a Vercel te deu (ou pelo domínio próprio, se configurar um em Project → Settings → Domains) e dê push de novo.
+3. Deploy. Você recebe uma URL do tipo `algo.vercel.app`.
+4. **Domínio próprio (`simulador.leactis.com.br`):** no projeto, vá em **Settings → Domains**, digite `simulador.leactis.com.br` e clique em **Add**. A Vercel mostra um registro **CNAME** pra você cadastrar no provedor de DNS do domínio `leactis.com.br` (Registro.br, ou outro DNS se o domínio tiver sido apontado pra lá):
+   - **Tipo:** CNAME
+   - **Nome/Host:** `simulador`
+   - **Valor/Destino:** `cname.vercel-dns.com.`
+
+   Depois de cadastrar, a Vercel valida sozinha (pode levar de minutos a algumas horas pra propagar) e emite o certificado HTTPS automaticamente. As tags `canonical`, `og:image`, `og:url` e `twitter:image` do `index.html` já estão configuradas para `simulador.leactis.com.br` — só precisa trocar se decidir usar outro domínio/subdomínio.
 
 ## Captura de leads (Supabase)
 
