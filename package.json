@@ -1,6 +1,7 @@
 {
   "name": "leactis-simulador-reforma-tributaria",
   "private": true,
+  "type": "module",
   "version": "1.0.0",
-  "description": "Landing page do Simulador da Reforma Tributária da Leactis (estática, sem build), para campanhas de anúncio pago."
+  "description": "Landing page do Simulador da Reforma Tributária da Leactis (estática, sem build) + função serverless de aviso de lead por e-mail, para campanhas de anúncio pago."
 }

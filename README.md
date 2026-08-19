@@ -95,8 +95,45 @@ configurado" em vez de fingir que enviou o lead — ele nunca finge sucesso.
 Pra ver os leads recebidos: painel do Supabase → **Table Editor** →
 `leactis_leads`. Cada lead vem com o prefixo `[Simulador Reforma
 Tributária]` no campo `desafio`, junto com o resumo da simulação (faturamento,
-atividade, ano e opção mais econômica) — não há notificação automática por
-e-mail nessa configuração.
+atividade, ano e opção mais econômica).
+
+## Aviso por e-mail a cada lead novo (opcional, mas recomendado)
+
+Sem isso, os leads só ficam armazenados no Supabase — ninguém é avisado, e é
+fácil esquecer de checar a tabela e deixar o lead esfriar. `api/lead-notify.js`
+é uma função serverless (Vercel) que recebe um aviso do Supabase a cada
+`INSERT` em `leactis_leads` e manda um e-mail via [Resend](https://resend.com)
+(plano grátis: 100 e-mails/dia, 3.000/mês).
+
+1. Crie uma conta grátis em [resend.com](https://resend.com), de preferência
+   **com o e-mail onde você quer receber os avisos** (ex: `contato@leactis.com.br`)
+   — sem verificar um domínio próprio no Resend, ele só entrega e-mails de
+   teste para o endereço da própria conta, o que já resolve pra esse uso.
+2. Em **API Keys**, crie uma chave nova e copie o valor (só aparece uma vez).
+3. No painel da Vercel, no projeto, vá em **Settings → Environment Variables**
+   e adicione três variáveis:
+   - `RESEND_API_KEY` = a chave do passo 2
+   - `RESEND_TO_EMAIL` = o e-mail que deve receber os avisos
+   - `LEAD_WEBHOOK_SECRET` = uma senha aleatória só sua, pra garantir que
+     só o Supabase consegue chamar essa função (qualquer string longa serve)
+   Depois de salvar, force um redeploy (**Deployments → ⋯ → Redeploy** no
+   último deploy) pra elas passarem a valer.
+4. No painel do Supabase, vá em **Database → Webhooks → Create a new hook**:
+   - **Table:** `leactis_leads`
+   - **Events:** `Insert`
+   - **Type:** `HTTP Request`
+   - **URL:** `https://SEU-DOMINIO-OU-PROJETO.vercel.app/api/lead-notify`
+     (troque pela URL real do seu deploy, ou por `https://simulador.leactis.com.br/api/lead-notify`
+     depois que o domínio próprio estiver ativo)
+   - **HTTP Headers:** adicione `x-webhook-secret` com o mesmo valor de
+     `LEAD_WEBHOOK_SECRET` do passo 3
+   - Salve.
+5. Teste: preencha o simulador de ponta a ponta com um lead de teste — o
+   e-mail deve chegar em alguns segundos.
+
+Enquanto `RESEND_API_KEY`/`RESEND_TO_EMAIL` não estiverem configuradas, a
+função responde normalmente (200) sem enviar nada — ela nunca deixa o
+Supabase com o webhook marcado como falha.
 
 ## Rastreamento de anúncios (GA4 e Meta Pixel)
 
