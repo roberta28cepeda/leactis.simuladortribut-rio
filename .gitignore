@@ -1,3 +1,13 @@
 .DS_Store
 node_modules/
 .vercel
+
+# ferramenta-analise-reforma/ (backend Python)
+ferramenta-analise-reforma/backend/.venv/
+ferramenta-analise-reforma/backend/__pycache__/
+ferramenta-analise-reforma/backend/**/__pycache__/
+ferramenta-analise-reforma/backend/*.pyc
+ferramenta-analise-reforma/backend/*.db
+ferramenta-analise-reforma/backend/.pytest_cache/
+ferramenta-analise-reforma/frontend/dist/
+ferramenta-analise-reforma/frontend/.env.local

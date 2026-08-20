@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<nfeProc xmlns="http://www.portalfiscal.inf.br/nfe" versao="4.00">
+  <NFe>
+    <infNFe Id="NFe35260112345678000199550010000012341123456785" versao="4.00">
+      <ide>
+        <cUF>35</cUF>
+        <nNF>1234</nNF>
+        <dhEmi>2026-03-15T10:00:00-03:00</dhEmi>
+      </ide>
+      <emit>
+        <CNPJ>12345678000199</CNPJ>
+        <xNome>Fornecedor Exemplo LTDA</xNome>
+      </emit>
+      <dest>
+        <CNPJ>98765432000188</CNPJ>
+        <xNome>Cliente Exemplo LTDA</xNome>
+      </dest>
+      <det nItem="1">
+        <prod>
+          <cProd>PROD001</cProd>
+          <xProd>Produto tributado normalmente</xProd>
+          <NCM>84713012</NCM>
+          <CFOP>5102</CFOP>
+          <uCom>UN</uCom>
+          <qCom>10.0000</qCom>
+          <vUnCom>100.00</vUnCom>
+          <vProd>1000.00</vProd>
+        </prod>
+        <imposto>
+          <ICMS>
+            <ICMS00>
+              <orig>0</orig>
+              <CST>00</CST>
+              <modBC>3</modBC>
+              <vBC>1000.00</vBC>
+              <pICMS>18.00</pICMS>
+              <vICMS>180.00</vICMS>
+            </ICMS00>
+          </ICMS>
+          <PIS>
+            <PISAliq>
+              <CST>01</CST>
+              <vBC>1000.00</vBC>
+              <pPIS>1.65</pPIS>
+              <vPIS>16.50</vPIS>
+            </PISAliq>
+          </PIS>
+          <COFINS>
+            <COFINSAliq>
+              <CST>01</CST>
+              <vBC>1000.00</vBC>
+              <pCOFINS>7.60</pCOFINS>
+              <vCOFINS>76.00</vCOFINS>
+            </COFINSAliq>
+          </COFINS>
+        </imposto>
+      </det>
+      <det nItem="2">
+        <prod>
+          <cProd>PROD002</cProd>
+          <xProd>Arroz tipo 1 (cesta básica)</xProd>
+          <NCM>10063021</NCM>
+          <CFOP>5102</CFOP>
+          <uCom>KG</uCom>
+          <qCom>50.0000</qCom>
+          <vUnCom>4.00</vUnCom>
+          <vProd>200.00</vProd>
+        </prod>
+        <imposto>
+          <ICMS>
+            <ICMS40>
+              <orig>0</orig>
+              <CST>40</CST>
+            </ICMS40>
+          </ICMS>
+          <PIS>
+            <PISNT>
+              <CST>06</CST>
+            </PISNT>
+          </PIS>
+          <COFINS>
+            <COFINSNT>
+              <CST>06</CST>
+            </COFINSNT>
+          </COFINS>
+        </imposto>
+      </det>
+      <total>
+        <ICMSTot>
+          <vBC>1000.00</vBC>
+          <vICMS>180.00</vICMS>
+          <vProd>1200.00</vProd>
+          <vNF>1200.00</vNF>
+        </ICMSTot>
+      </total>
+    </infNFe>
+    <protNFe>
+      <infProt>
+        <chNFe>35260112345678000199550010000012341123456785</chNFe>
+        <cStat>100</cStat>
+        <xMotivo>Autorizado o uso da NF-e</xMotivo>
+      </infProt>
+    </protNFe>
+  </NFe>
+</nfeProc>
