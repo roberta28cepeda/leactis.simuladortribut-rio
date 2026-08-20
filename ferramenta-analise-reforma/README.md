@@ -30,6 +30,18 @@ Ver `roteiro-entrevistas-validacao.md` (enviado à parte) para o roteiro de
 validação com os escritórios-piloto — os resultados dessa validação são o
 que deve preencher a tabela de parâmetros de verdade.
 
+`docs/spec-motor-calculo-ibs-cbs.md` traz uma pesquisa bem mais detalhada
+do cronograma (fontes: LC 214/2025, página oficial da Receita Federal, e
+artigos de escritórios de contabilidade). O cronograma 2029–2032
+(90/80/70/60/0% de ICMS+ISS residual) tem **fonte oficial** (Receita
+Federal, art. 128 do ADCT) e já está refletido no motor de cálculo e
+coberto por teste de regressão (`tests/test_cronograma_adct.py`, batendo
+com o exemplo numérico do próprio documento). As alíquotas nominais de
+CBS/IBS e as reduções por NCM continuam sendo estimativa de mercado — o
+próprio documento termina recomendando validação com tributarista antes de
+qualquer decisão final, então tudo segue com
+`validado_por_tributarista=False`.
+
 ## O que já funciona (testado)
 
 - **Parser de XML de NF-e** (modelo 55, schema público SEFAZ): extrai NCM,
@@ -38,8 +50,11 @@ que deve preencher a tabela de parâmetros de verdade.
   válida, item isento e 3 tipos de arquivo corrompido/incompleto.
 - **Motor de cálculo parametrizável**: dado os parâmetros tributários de um
   ano, calcula a carga atual x carga com a reforma por item, agregando por
-  análise. 6 testes cobrindo os cenários de início e fim da transição,
-  redução por NCM, e ano sem parâmetro cadastrado (não inventa número).
+  análise. Implementa a regra multiplicativa do cronograma 2029-2032 (fração
+  sobre a base original, não desconto acumulado ano a ano — ver
+  `tests/test_cronograma_adct.py`) e o zeramento do IPI a partir de 2027.
+  8 testes cobrindo início/fim da transição, redução por NCM, ano sem
+  parâmetro cadastrado, e o exemplo numérico oficial da spec.
 - **API REST (FastAPI)**: upload de XML/`.zip` em lote, cálculo do impacto
   ano a ano, listagem/detalhe de análises, exportação em PDF. Upload com
   arquivo corrompido não trava o processamento dos demais — cada erro é
@@ -48,13 +63,44 @@ que deve preencher a tabela de parâmetros de verdade.
 - **Frontend (React + Vite + recharts)**: tela de upload e tela de
   resultado com gráfico comparativo, tabela ano a ano, lista de erros de
   leitura e botão de exportar PDF.
-- **17 testes automatizados, todos passando** (`pytest`).
+- **19 testes automatizados, todos passando** (`pytest`).
 
 ## O que ainda não está aqui (fora do escopo desta rodada)
 
 Seguindo o PRD: leitura de SPED, módulo de crédito tributário,
 precificação/margem, efeito caixa/Split Payment, multi-cliente,
 integração e-CAC, autenticação de usuários. Tudo isso é Fase 2+ no PRD.
+
+Além disso, `docs/spec-motor-calculo-ibs-cbs.md` (seção 6) lista casos de
+teste obrigatórios antes de liberar o motor para uso real — destes, o
+motor de cálculo **ainda não cobre**:
+
+- [ ] **Imposto Seletivo (IS)**: incide a partir de 2027 sobre itens
+  específicos (combustíveis fósseis, bebidas açucaradas, cigarros,
+  produtos poluentes). Não modelado — precisa de uma tabela de NCMs
+  sujeitos ao IS e sua alíquota, que a spec também marca como pendente de
+  validação.
+- [ ] **Simples Nacional híbrido x unificado**: a spec descreve uma decisão
+  do contribuinte prevista para set/2026 entre os dois regimes. O motor
+  atual não distingue regime tributário do cliente — trata toda nota da
+  mesma forma.
+- [ ] **MEI**: cronograma próprio de valores fixos (Anexo VII da LC
+  123/2006). Não modelado.
+- [ ] **Setor financeiro**: a spec pede que o sistema **sinalize "não
+  suportado"** para CNAE desse setor, em vez de calcular errado. O motor
+  atual não tem acesso ao CNAE do cliente (a NF-e não carrega esse dado
+  diretamente) nem faz essa checagem — hoje ele calcularia normalmente,
+  o que seria incorreto para este setor. **Isso é um risco real se a
+  ferramenta for usada com um cliente do setor financeiro antes desse
+  ajuste.**
+
+## Limitações conhecidas (simplificações assumidas neste MVP)
+
+- IPI zera a partir de 2027 em todos os casos — a exceção da Zona Franca de
+  Manaus (que mantém IPI) não é modelada.
+- O ano de 2026 é tratado como "sem efeito" (CBS/IBS não computados),
+  aproximando o mecanismo de neutralização/compensação descrito na spec,
+  mas sem modelar o mecanismo de compensação em si.
 
 ---
 
@@ -133,7 +179,7 @@ backend/
     models.py                  ORM (notas, itens, parâmetros tributários)
     api/                       endpoints (upload, análises, PDF)
     seed_parametros.py         popula parâmetros PLACEHOLDER
-  tests/                       17 testes (parser, motor de cálculo, API)
+  tests/                       19 testes (parser, motor de cálculo, cronograma ADCT, API)
 frontend/
   src/App.jsx                  tela de upload + tela de resultado
 docker-compose.yml

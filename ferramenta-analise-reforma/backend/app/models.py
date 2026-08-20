@@ -118,6 +118,9 @@ class ParametroTransicaoAno(Base):
     fracao_ibs_ativa = Column(Float, nullable=False)       # 0.0 a 1.0
     fracao_icms_iss_residual = Column(Float, nullable=False)  # 0.0 a 1.0
     cbs_substitui_pis_cofins = Column(Boolean, default=True)
+    # IPI vai a zero a partir de 2027 (exceto Zona Franca de Manaus, não
+    # modelada aqui -- ver README, seção "Limitações conhecidas").
+    ipi_zerado = Column(Boolean, default=False)
     validado_por_tributarista = Column(Boolean, default=False)
     fonte = Column(String, nullable=True)
 

@@ -103,12 +103,16 @@ def calcular_impacto_item(
 
         # Cada tributo antigo só é "residual" dentro do seu próprio grupo --
         # nunca sobre a carga_atual inteira (isso duplicaria PIS/COFINS
-        # junto com o resíduo de ICMS/ISS). IPI não é tocado pela transição
-        # neste placeholder (simplificação: a reforma não extingue o IPI
-        # diretamente, ver README.md).
+        # junto com o resíduo de ICMS/ISS). A fração de ICMS/ISS aplicada
+        # aqui é sempre sobre o valor JÁ destacado na nota (equivalente à
+        # "alíquota original", já que ICMS/ISS não mudam de valor nominal
+        # até 2029) -- isso implementa a regra multiplicativa sobre a base
+        # original exigida pela especificação (não é um desconto acumulado
+        # ano a ano). IPI zera a partir de 2027 (exceto Zona Franca de
+        # Manaus, não modelada aqui -- ver README, "Limitações conhecidas").
         icms_iss_atual = (item.valor_icms or 0.0) + (item.valor_issqn or 0.0)
         pis_cofins_atual = (item.valor_pis or 0.0) + (item.valor_cofins or 0.0)
-        ipi_atual = item.valor_ipi or 0.0
+        ipi_atual = 0.0 if transicao.ipi_zerado else (item.valor_ipi or 0.0)
 
         icms_iss_residual = icms_iss_atual * transicao.fracao_icms_iss_residual
         pis_cofins_residual = 0.0 if transicao.cbs_substitui_pis_cofins else pis_cofins_atual
