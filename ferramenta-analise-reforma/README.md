@@ -10,37 +10,34 @@ MVP técnico da ferramenta descrita no PRD (upload de XML de NF-e → comparaç�
 da carga tributária atual x Reforma Tributária, ano a ano, 2026–2033),
 para escritórios de contabilidade.
 
-## ⚠️ Status: base técnica, sem validação tributária ainda
+## ⚠️ Status de validação
 
 Este projeto implementa a **arquitetura completa** do MVP P0 do PRD (parser
 de XML, motor de cálculo parametrizável, API, tela de resultado, exportação
-em PDF) e está **testado de ponta a ponta** — mas os **valores tributários
-usados no cálculo são placeholders ilustrativos**, não validados por um
-tributarista. Isso é proposital: o próprio PRD e o plano de validação
-recomendam não travar nenhuma regra tributária no código antes de validar
-com especialista e com os 5–10 escritórios-piloto.
+em PDF) e está **testado de ponta a ponta**.
 
-Todo parâmetro tributário (alíquota de referência de CBS/IBS, cronograma de
-transição, reduções por NCM) tem uma flag `validado_por_tributarista` no
-banco — enquanto ela for `False`, a API e a tela de resultado exibem um
-aviso explícito. **Não apresente os números gerados hoje a um cliente
-real.**
+Os parâmetros de **alíquota de referência de CBS/IBS e do cronograma de
+transição** (2026–2033) estão marcados como `validado_por_tributarista=True`.
+**Nível dessa validação, com transparência total:** confirmação verbal do
+gestor tributarista da equipe Leactis, em reunião interna, sem
+ata/documento formal anexado — registrado assim, literalmente, no campo
+`fonte` de cada parâmetro no banco (`backend/app/seed_parametros.py`). Não é
+uma revisão formal artigo por artigo com um tributarista externo, nem uma
+sessão dedicada percorrendo o cronograma como o PRD original e a spec
+recomendavam. O cronograma 2029–2032 (90/80/70/60/0% de ICMS+ISS residual)
+tem reforço de fonte oficial independente (Receita Federal, art. 128 do
+ADCT) — ver `docs/spec-motor-calculo-ibs-cbs.md`.
+
+As **reduções por NCM continuam como placeholder** (`validado_por_tributarista=False`):
+são só 2 exemplos ilustrativos (arroz, feijão), não uma lista completa —
+isso não foi o que a reunião cobriu. A tela de resultado mostra o aviso
+amarelo sempre que uma análise usa um item cujo NCM bate numa dessas
+regras não validadas, mesmo com o cronograma geral marcado como validado
+(ver `tests/test_motor_calculo.py::test_cronograma_validado_nao_esconde_ncm_nao_validado`).
 
 Ver `roteiro-entrevistas-validacao.md` (enviado à parte) para o roteiro de
-validação com os escritórios-piloto — os resultados dessa validação são o
-que deve preencher a tabela de parâmetros de verdade.
-
-`docs/spec-motor-calculo-ibs-cbs.md` traz uma pesquisa bem mais detalhada
-do cronograma (fontes: LC 214/2025, página oficial da Receita Federal, e
-artigos de escritórios de contabilidade). O cronograma 2029–2032
-(90/80/70/60/0% de ICMS+ISS residual) tem **fonte oficial** (Receita
-Federal, art. 128 do ADCT) e já está refletido no motor de cálculo e
-coberto por teste de regressão (`tests/test_cronograma_adct.py`, batendo
-com o exemplo numérico do próprio documento). As alíquotas nominais de
-CBS/IBS e as reduções por NCM continuam sendo estimativa de mercado — o
-próprio documento termina recomendando validação com tributarista antes de
-qualquer decisão final, então tudo segue com
-`validado_por_tributarista=False`.
+validação com os escritórios-piloto, e `docs/spec-motor-calculo-ibs-cbs.md`
+para a pesquisa de fontes por trás do cronograma.
 
 ## O que já funciona (testado)
 
@@ -53,7 +50,7 @@ qualquer decisão final, então tudo segue com
   análise. Implementa a regra multiplicativa do cronograma 2029-2032 (fração
   sobre a base original, não desconto acumulado ano a ano — ver
   `tests/test_cronograma_adct.py`) e o zeramento do IPI a partir de 2027.
-  8 testes cobrindo início/fim da transição, redução por NCM, ano sem
+  10 testes cobrindo início/fim da transição, redução por NCM, ano sem
   parâmetro cadastrado, e o exemplo numérico oficial da spec.
 - **API REST (FastAPI)**: upload de XML/`.zip` em lote, cálculo do impacto
   ano a ano, listagem/detalhe de análises, exportação em PDF. Upload com
@@ -63,7 +60,7 @@ qualquer decisão final, então tudo segue com
 - **Frontend (React + Vite + recharts)**: tela de upload e tela de
   resultado com gráfico comparativo, tabela ano a ano, lista de erros de
   leitura e botão de exportar PDF.
-- **19 testes automatizados, todos passando** (`pytest`).
+- **21 testes automatizados, todos passando** (`pytest`).
 
 ## O que ainda não está aqui (fora do escopo desta rodada)
 
@@ -112,7 +109,8 @@ motor de cálculo **ainda não cobre**:
 docker compose up --build
 ```
 Backend sobe em `http://localhost:8000`, já com Postgres e os parâmetros
-placeholder semeados automaticamente.
+semeados automaticamente (alíquotas/cronograma validados; reduções por NCM
+ainda placeholder — ver seção acima).
 
 Frontend (fora do compose, por enquanto):
 ```bash
@@ -129,7 +127,7 @@ npm run dev
 cd backend
 python3 -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt
-python -m app.seed_parametros   # popula parâmetros placeholder (SQLite por padrão)
+python -m app.seed_parametros   # popula parâmetros (SQLite por padrão)
 uvicorn app.main:app --reload
 
 # Frontend (outro terminal)
@@ -160,14 +158,21 @@ python -m pytest tests/ -v
 
 ## Como validar/atualizar os parâmetros tributários
 
-Depois que a validação com o tributarista e os escritórios-piloto estiver
-pronta, atualize `backend/app/seed_parametros.py` com os valores reais
-(ou insira direto nas tabelas `parametros_aliquota_referencia`,
+O que falta: preencher `parametros_reducao_ncm` de verdade (hoje só 2
+exemplos ilustrativos) com a lista real de NCMs com alíquota
+reduzida/zerada (cesta básica, saúde, educação etc., conforme os Anexos da
+LC 214/2025), e — idealmente — trocar a validação verbal das alíquotas
+CBS/IBS e do cronograma por algo mais formal (revisão artigo por artigo com
+tributarista, como o PRD original recomendava), além dos resultados do
+roteiro de validação com os escritórios-piloto.
+
+Para atualizar: edite `backend/app/seed_parametros.py` com os valores
+reais (ou insira direto nas tabelas `parametros_aliquota_referencia`,
 `parametros_transicao_ano` e `parametros_reducao_ncm` via banco), e marque
-`validado_por_tributarista=True` com a fonte legal em `fonte` (ex: "LC
-214/2025, art. X"). O motor de cálculo já lê essas tabelas em tempo de
-execução — nenhuma mudança de código é necessária para atualizar alíquotas
-ou o cronograma de transição.
+`validado_por_tributarista=True` com a fonte em `fonte` (ex: "LC 214/2025,
+art. X" ou "Confirmado por [nome], [data], [documento/ata]"). O motor de
+cálculo já lê essas tabelas em tempo de execução — nenhuma mudança de
+código é necessária para atualizar alíquotas ou o cronograma de transição.
 
 ## Estrutura
 
@@ -179,7 +184,7 @@ backend/
     models.py                  ORM (notas, itens, parâmetros tributários)
     api/                       endpoints (upload, análises, PDF)
     seed_parametros.py         popula parâmetros PLACEHOLDER
-  tests/                       19 testes (parser, motor de cálculo, cronograma ADCT, API)
+  tests/                       21 testes (parser, motor de cálculo, cronograma ADCT, API)
 frontend/
   src/App.jsx                  tela de upload + tela de resultado
 docker-compose.yml

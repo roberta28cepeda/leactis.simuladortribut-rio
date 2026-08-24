@@ -9,10 +9,11 @@ ParametroReducaoNcm). Isso é proposital, porque essas regras vêm sendo
 publicadas em fases pelo Comitê Gestor do IBS/Receita Federal e vão mudar
 por decreto ao longo dos anos até 2033.
 
-⚠️ Os parâmetros seedados em seed_parametros.py são PLACEHOLDERS
-ilustrativos, com `validado_por_tributarista=False`. Este motor calcula
-corretamente EM CIMA dos parâmetros que você der a ele -- mas não garante
-que os parâmetros atuais reflitam a lei. Ver README.md.
+Este motor calcula corretamente EM CIMA dos parâmetros que você der a ele
+-- mas não garante, por si só, que os parâmetros atuais reflitam a lei.
+Cada parâmetro carrega sua própria flag `validado_por_tributarista` e um
+campo `fonte` -- ver app/seed_parametros.py para o nível de validação de
+cada grupo (alíquotas/cronograma vs. reduções por NCM) e README.md.
 """
 
 from dataclasses import dataclass, field
@@ -29,6 +30,7 @@ class ImpactoItemAno:
     carga_atual: float
     carga_reforma: float
     percentual_reducao_aplicado: float
+    reducao_ncm_validada: bool = True  # False só quando uma redução de NCM não validada foi de fato aplicada
 
 
 @dataclass
@@ -124,6 +126,9 @@ def calcular_impacto_item(
             carga_atual=carga_atual,
             carga_reforma=round(carga_reforma_bruta, 2),
             percentual_reducao_aplicado=reducao_ncm,
+            # só "não validado" quando uma redução foi de fato aplicada
+            # (reducao_ncm > 0) usando uma regra ainda não confirmada
+            reducao_ncm_validada=ncm_validado or reducao_ncm == 0,
         ))
 
     return resultados
@@ -135,11 +140,20 @@ def calcular_impacto_analise(db: Session, analise: "models.Analise", anos: list[
     todos_parametros_validados = _todos_parametros_validados(db, anos)
 
     acumulado = {ano: {"atual": 0.0, "reforma": 0.0} for ano in anos}
+    alguma_reducao_ncm_nao_validada = False
     for nota in analise.notas:
         for item in nota.itens:
             for r in calcular_impacto_item(db, item, anos):
                 acumulado[r.ano]["atual"] += r.carga_atual
                 acumulado[r.ano]["reforma"] += r.carga_reforma
+                if not r.reducao_ncm_validada:
+                    alguma_reducao_ncm_nao_validada = True
+
+    # Uma análise só está "totalmente validada" se as alíquotas/cronograma
+    # do ano estiverem validados E nenhum item tiver usado uma redução de
+    # NCM ainda não confirmada -- não basta o cronograma estar OK se um
+    # item de cesta básica usou um percentual de redução placeholder.
+    parametros_validados = todos_parametros_validados and not alguma_reducao_ncm_nao_validada
 
     return [
         ImpactoAno(
@@ -147,7 +161,7 @@ def calcular_impacto_analise(db: Session, analise: "models.Analise", anos: list[
             carga_atual=round(acumulado[ano]["atual"], 2),
             carga_reforma=round(acumulado[ano]["reforma"], 2),
             diferenca=round(acumulado[ano]["reforma"] - acumulado[ano]["atual"], 2),
-            parametros_validados=todos_parametros_validados,
+            parametros_validados=parametros_validados,
         )
         for ano in anos
     ]

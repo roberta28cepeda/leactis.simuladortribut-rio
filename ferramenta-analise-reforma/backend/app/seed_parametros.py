@@ -1,18 +1,17 @@
-"""Popula as tabelas de parâmetros com valores PLACEHOLDER, só para permitir
-rodar o sistema de ponta a ponta antes da validação com um tributarista.
+"""Popula as tabelas de parâmetros com os valores do motor de cálculo.
 
-⚠️ NENHUM valor aqui foi validado. Todos ficam com
-validado_por_tributarista=False de propósito -- a API e o frontend exibem
-um aviso sempre que algum parâmetro usado numa análise não foi validado.
+As alíquotas de referência (CBS/IBS) e o cronograma de transição foram
+confirmados verbalmente pelo gestor tributarista da equipe Leactis, em
+reunião interna (sem ata/registro formal anexado). Isso é uma validação
+mais leve do que uma revisão formal artigo por artigo -- registrado aqui
+com honestidade no campo `fonte` de cada parâmetro, para que qualquer
+pessoa lendo o banco depois saiba exatamente qual foi o nível de
+confirmação por trás do número.
 
-Atualizado a partir de docs/spec-motor-calculo-ibs-cbs.md (fontes: texto da
-LC 214/2025, página oficial da Receita Federal sobre a Reforma do Consumo,
-e artigos de escritórios de contabilidade -- ver "Fontes consultadas" no
-documento). O cronograma 2029-2032 (90/80/70/60/0% de ICMS+ISS residual)
-tem fonte oficial (Receita Federal, art. 128 do ADCT); as alíquotas
-nominais de referência (~8,8% CBS / ~17,7% IBS) e as reduções por NCM
-seguem sendo estimativas de mercado -- ver docs/spec-motor-calculo-ibs-cbs.md,
-seção 7, "O que ainda precisa de validação com tributarista".
+As reduções por NCM continuam como PLACEHOLDER (validado_por_tributarista=
+False): a lista abaixo é só 2 exemplos ilustrativos, não uma tabela
+completa de NCMs da cesta básica/Anexos -- isso não foi o que a reunião
+cobriu, e marcar como validado sugeriria (erroneamente) uma lista completa.
 
 Rode com: python -m app.seed_parametros
 """
@@ -20,15 +19,17 @@ Rode com: python -m app.seed_parametros
 from app.database import Base, SessionLocal, engine
 from app.models import ParametroAliquotaReferencia, ParametroReducaoNcm, ParametroTransicaoAno
 
-FONTE_OFICIAL_ADCT = (
-    "Receita Federal (gov.br/receitafederal, 'Entenda a Reforma Tributária do "
-    "Consumo') + art. 128/129 do ADCT (EC 132/2023) -- cronograma 90/80/70/60/0% "
-    "confirmado por fonte oficial. Alíquotas nominais de CBS/IBS ainda são "
-    "estimativa de mercado, NÃO validada por tributarista."
+FONTE_VALIDADA = (
+    "Confirmado verbalmente pelo gestor tributarista da equipe Leactis, em "
+    "reunião interna (sem ata/documento formal anexado). Cronograma "
+    "2029-2032 também tem respaldo em fonte oficial (Receita Federal, "
+    "gov.br/receitafederal, 'Entenda a Reforma Tributária do Consumo' + "
+    "art. 128/129 do ADCT, EC 132/2023)."
 )
-FONTE_ESTIMATIVA = (
-    "Estimativa de mercado (fontes secundárias: artigos de escritórios de "
-    "contabilidade), NÃO validada por tributarista -- ver docs/spec-motor-calculo-ibs-cbs.md."
+FONTE_ESTIMATIVA_NCM = (
+    "Exemplo ilustrativo, NÃO é uma lista oficial/completa de NCMs -- "
+    "não coberto pela validação do gestor tributarista. Conferir Anexo I "
+    "da LC 214/2025. Ver docs/spec-motor-calculo-ibs-cbs.md."
 )
 
 # cbs_referencia, ibs_referencia
@@ -69,6 +70,7 @@ TRANSICAO = {
 
 # Exemplos ilustrativos de redução -- NÃO é uma lista oficial/completa de
 # NCMs da cesta básica ou de regimes diferenciados (LC 214/2025, Anexos).
+# Continua como placeholder -- ver FONTE_ESTIMATIVA_NCM.
 REDUCOES_NCM_EXEMPLO = [
     ("1006", 1.00, "Arroz (cesta básica -- exemplo ilustrativo, conferir Anexo I da LC 214/2025)"),
     ("0713", 1.00, "Feijão (cesta básica -- exemplo ilustrativo)"),
@@ -83,29 +85,28 @@ def seed():
             for ano, (cbs, ibs) in ALIQUOTAS_REFERENCIA.items():
                 db.add(ParametroAliquotaReferencia(
                     ano=ano, cbs_referencia=cbs, ibs_referencia=ibs,
-                    validado_por_tributarista=False,
-                    fonte=FONTE_ESTIMATIVA,
+                    validado_por_tributarista=True,
+                    fonte=FONTE_VALIDADA,
                 ))
         if db.query(ParametroTransicaoAno).count() == 0:
             for ano, (ibs_frac, icms_iss_frac, cbs_ativa, ipi_zerado) in TRANSICAO.items():
-                fonte = FONTE_OFICIAL_ADCT if ano >= 2029 else FONTE_ESTIMATIVA
                 db.add(ParametroTransicaoAno(
                     ano=ano, fracao_ibs_ativa=ibs_frac,
                     fracao_icms_iss_residual=icms_iss_frac,
                     cbs_substitui_pis_cofins=cbs_ativa,
                     ipi_zerado=ipi_zerado,
-                    validado_por_tributarista=False,
-                    fonte=fonte,
+                    validado_por_tributarista=True,
+                    fonte=FONTE_VALIDADA,
                 ))
         if db.query(ParametroReducaoNcm).count() == 0:
             for prefixo, reducao, desc in REDUCOES_NCM_EXEMPLO:
                 db.add(ParametroReducaoNcm(
                     ncm_prefixo=prefixo, percentual_reducao=reducao,
                     descricao=desc, validado_por_tributarista=False,
-                    fonte=FONTE_ESTIMATIVA,
+                    fonte=FONTE_ESTIMATIVA_NCM,
                 ))
         db.commit()
-        print("Parâmetros placeholder inseridos (todos validado_por_tributarista=False).")
+        print("Parâmetros inseridos (alíquotas/cronograma validados; reduções por NCM ainda placeholder).")
     finally:
         db.close()
 

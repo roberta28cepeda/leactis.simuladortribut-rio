@@ -99,3 +99,38 @@ def test_impacto_analise_agrega_todas_as_notas_e_marca_validacao(db):
     assert resultado[0].ano == 2027
     assert resultado[1].ano == 2033
     assert resultado[1].carga_reforma > resultado[0].carga_reforma  # IBS pleno em 2033 pesa mais que 2027 nesse cenário
+
+
+def test_cronograma_validado_nao_esconde_ncm_nao_validado(db):
+    """Trava específica: mesmo com alíquotas/cronograma validados, uma
+    análise que usa uma redução de NCM ainda não confirmada precisa
+    continuar mostrando o aviso -- não basta o cronograma geral estar OK."""
+    db.add(models.ParametroReducaoNcm(
+        ncm_prefixo="0713", percentual_reducao=1.0, descricao="feijão -- não validado",
+        validado_por_tributarista=False,
+    ))
+    db.commit()
+
+    analise = models.Analise(nome_cliente="Cliente Teste")
+    nota = models.NotaFiscal(nome_arquivo="a.xml", valor_total=1000)
+    nota.itens = [_item(1000, ncm="07131000", icms=0, pis=0, cofins=0)]  # bate no NCM 0713, não validado
+    analise.notas = [nota]
+    db.add(analise)
+    db.commit()
+
+    resultado = calcular_impacto_analise(db, analise, [2033])
+    assert resultado[0].parametros_validados is False
+
+
+def test_item_sem_reducao_ncm_nao_dispara_aviso(db):
+    """Já o oposto: item sem NCM cadastrado em nenhuma regra de redução
+    não deve, por si só, marcar a análise como não validada."""
+    analise = models.Analise(nome_cliente="Cliente Teste")
+    nota = models.NotaFiscal(nome_arquivo="a.xml", valor_total=1000)
+    nota.itens = [_item(1000, ncm="84713012", icms=180, pis=16.5, cofins=76)]  # não bate em nenhuma regra
+    analise.notas = [nota]
+    db.add(analise)
+    db.commit()
+
+    resultado = calcular_impacto_analise(db, analise, [2033])
+    assert resultado[0].parametros_validados is True
