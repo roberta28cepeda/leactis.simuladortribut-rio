@@ -590,6 +590,7 @@
       body: JSON.stringify(payload),
     }).then(function (res) {
       if (!res.ok) throw new Error("falha ao enviar");
+      if (typeof window.leactisTrack === "function") window.leactisTrack("form_submit", { elemento: "simulador-lead" });
       unlockAndShow();
     }).catch(function () {
       err.textContent = "Não foi possível enviar agora. Tente de novo ou fale pelo WhatsApp.";
@@ -602,5 +603,6 @@
   update();
 })();
 </script>
+<script src="/tracker.js"></script>
 </body>
 </html>
