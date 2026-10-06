@@ -528,10 +528,10 @@
     scrollToLeadGate();
   });
 
-  // ---------- Captura de lead -> Supabase (mesmo padrão do resto do site) ----------
+  // ---------- Captura de lead -> Supabase (projeto principal da Leactis, tabela leactis_site_leads) ----------
   // Configure em Settings > API do seu projeto Supabase (veja README.md).
-  var SUPABASE_URL = 'https://ifwoensmkprqqvtrjjub.supabase.co';
-  var SUPABASE_ANON_KEY = 'sb_publishable_kAAR8DGWlPYUynmUco6ogg_6OVIN0Qx';
+  var SUPABASE_URL = 'https://lqzrdjwyueyeapaabhwu.supabase.co';
+  var SUPABASE_ANON_KEY = 'sb_publishable_lI9dWdkFgAc1xB6IP6I60A_GvweJOW9';
 
   $("btn-ver-resultado").addEventListener("click", function () {
     var btn = this;
@@ -584,7 +584,7 @@
     var originalText = btn.textContent;
     btn.disabled = true;
     btn.textContent = "Enviando...";
-    fetch(SUPABASE_URL + "/rest/v1/leactis_leads", {
+    fetch(SUPABASE_URL + "/rest/v1/leactis_site_leads", {
       method: "POST",
       headers: { "Content-Type": "application/json", "apikey": SUPABASE_ANON_KEY, "Authorization": "Bearer " + SUPABASE_ANON_KEY, "Prefer": "return=minimal" },
       body: JSON.stringify(payload),
